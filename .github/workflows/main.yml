@@ -16,10 +16,6 @@ jobs:
       with:
         ruby-version: '2.7' # Replace with the Ruby version used in your project
 
-    - name: Install Xcode (if needed)
-      run: |
-        xcode-select --install
-
     - name: Attempt to Build the Project
       run: |
         # Attempt a standard Xcode build command
