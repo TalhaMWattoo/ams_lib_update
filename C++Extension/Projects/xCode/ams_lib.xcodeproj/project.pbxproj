@@ -954,7 +954,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACH_O_TYPE = mh_bundle;
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = ams_lib;
 				SDKROOT = macosx;
@@ -1009,41 +1009,36 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACH_O_TYPE = mh_bundle;
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				PRODUCT_NAME = ams_lib;
 				SDKROOT = macosx;
-				VALID_ARCHS = "i386 x86_64";
+				VALID_ARCHS = "arm64";
 			};
 			name = Release;
 		};
-		33CDE5EA182703B200F7C6E8 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CODE_SIGN_IDENTITY = "Mac Developer";
-				DEVELOPMENT_TEAM = B5Q422W65M;
-				DYLIB_COMPATIBILITY_VERSION = "";
-				DYLIB_CURRENT_VERSION = "";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../ThirdParty/Ruby/lib/mac/2.0\"",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					RUBY_VERSION20,
-				);
-				HEADER_SEARCH_PATHS = (
-					../../ThirdParty/Ruby/include/2.0/mac,
-					"../../ThirdParty/Ruby/include/2.0/mac/universal-darwin12.5.0",
-				);
-				LD_DYLIB_INSTALL_NAME = "$(EXECUTABLE_PATH)";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				VALID_ARCHS = "$(inherited)";
-			};
-			name = Debug;
+		33CDE5EB182703B200F7C6E8 /* Release for M1 */ = {
+		    isa = XCBuildConfiguration;
+		    buildSettings = {
+		        ARCHS = "arm64"; // Targeting M1 architecture
+		        CLANG_ENABLE_OBJC_WEAK = YES;
+		        CODE_SIGN_IDENTITY = ""; // Disable code signing, or set to a valid identity if necessary
+		        DEVELOPMENT_TEAM = ""; // Clear this if disabling code signing
+		        DYLIB_COMPATIBILITY_VERSION = "";
+		        DYLIB_CURRENT_VERSION = "";
+		        FRAMEWORK_SEARCH_PATHS = (
+		            "$(inherited)",
+		        );
+		        HEADER_SEARCH_PATHS = (
+		            // Specify necessary header search paths
+		        );
+		        LD_DYLIB_INSTALL_NAME = "$(EXECUTABLE_PATH)";
+		        LIBRARY_SEARCH_PATHS = "$(inherited)";
+		        MACOSX_DEPLOYMENT_TARGET = 12.0; // Ensure compatibility with M1
+		        VALID_ARCHS = "arm64"; // Ensure only M1 architecture is targeted
+		    };
+		    name = "Release for M1";
 		};
+
 		33CDE5EB182703B200F7C6E8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1067,7 +1062,7 @@
 				);
 				LD_DYLIB_INSTALL_NAME = "$(EXECUTABLE_PATH)";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				VALID_ARCHS = "$(inherited)";
 			};
 			name = Release;
@@ -1095,7 +1090,7 @@
 				);
 				LD_DYLIB_INSTALL_NAME = "$(EXECUTABLE_PATH)";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				VALID_ARCHS = "$(inherited)";
 			};
 			name = Debug;
@@ -1124,7 +1119,7 @@
 				);
 				LD_DYLIB_INSTALL_NAME = "$(EXECUTABLE_PATH)";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				VALID_ARCHS = "$(inherited)";
 			};
 			name = Release;
@@ -1152,7 +1147,7 @@
 				);
 				LD_DYLIB_INSTALL_NAME = "$(EXECUTABLE_PATH)";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				PRODUCT_NAME = ams_lib;
 				VALID_ARCHS = "$(inherited)";
 			};
@@ -1182,7 +1177,7 @@
 				);
 				LD_DYLIB_INSTALL_NAME = "$(EXECUTABLE_PATH)";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				PRODUCT_NAME = ams_lib;
 				VALID_ARCHS = "$(inherited)";
 			};
@@ -1211,7 +1206,7 @@
 				);
 				LD_DYLIB_INSTALL_NAME = "$(EXECUTABLE_PATH)";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				PRODUCT_MODULE_NAME = ams_lib;
 				PRODUCT_NAME = ams_lib;
 				VALID_ARCHS = "$(inherited)";
@@ -1268,7 +1263,7 @@
 				HEADER_SEARCH_PATHS = ../../ThirdParty/Ruby/include/1.8/mac;
 				LD_DYLIB_INSTALL_NAME = "$(EXECUTABLE_PATH)";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				VALID_ARCHS = "$(inherited)";
 			};
 			name = Debug;
@@ -1293,7 +1288,7 @@
 				HEADER_SEARCH_PATHS = ../../ThirdParty/Ruby/include/1.8/mac;
 				LD_DYLIB_INSTALL_NAME = "$(EXECUTABLE_PATH)";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				VALID_ARCHS = "$(inherited)";
 			};
 			name = Release;
