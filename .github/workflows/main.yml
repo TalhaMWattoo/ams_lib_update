@@ -5,9 +5,6 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: macos-latest
-    strategy:
-      matrix:
-        architecture: ['arm64']
     steps:
     - uses: actions/checkout@v2
 
@@ -16,19 +13,14 @@ jobs:
       with:
         ruby-version: '2.7' # Replace with the Ruby version used in your project
 
-    - name: Change to Xcode Project Directory
-      run: cd C++Extension/Projects/xCode/
-    
     - name: Build ams_lib.bundle
       run: |
-        xcodebuild -project ams_lib.xcodeproj -configuration Release
+        xcodebuild -project "${{ github.workspace }}/C++Extension/Projects/xCode/ams_lib.xcodeproj" -configuration Release
     
     - name: List Build Artifacts
       run: |
-        # List contents of the default build directory
-        ls -R ${GITHUB_WORKSPACE}/DerivedData
+        ls -R "${{ github.workspace }}/DerivedData"
     
     - name: Find and Print ams_lib.bundle Location
       run: |
-        # Search for ams_lib.bundle
-        find ${GITHUB_WORKSPACE} -name "ams_lib.bundle" -exec echo {} \;
+        find "${{ github.workspace }}" -name "ams_lib.bundle" -exec echo {} \;
