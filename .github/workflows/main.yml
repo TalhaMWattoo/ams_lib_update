@@ -20,18 +20,18 @@ jobs:
       run: |
         xcode-select --install
 
-- name: Attempt to Build the Project
-  run: |
-    # Attempt a standard Xcode build command
-    # Replace "YourProjectName" with the name of your Xcode project if known
-    xcodebuild -scheme "AMS_LIB" -configuration Release
-
-- name: List Build Artifacts
-  run: |
-    # List contents of the default build directory
-    ls -R ${GITHUB_WORKSPACE}/DerivedData
-
-- name: Find and Print ams_lib.bundle Location
-  run: |
-    # Search for ams_lib.bundle
-    find ${GITHUB_WORKSPACE} -name "ams_lib.bundle" -exec echo {} \;
+    - name: Attempt to Build the Project
+      run: |
+        # Attempt a standard Xcode build command
+        # Replace "YourProjectName" with the name of your Xcode project if known
+        xcodebuild -scheme "AMS_LIB" -configuration Release
+    
+    - name: List Build Artifacts
+      run: |
+        # List contents of the default build directory
+        ls -R ${GITHUB_WORKSPACE}/DerivedData
+    
+    - name: Find and Print ams_lib.bundle Location
+      run: |
+        # Search for ams_lib.bundle
+        find ${GITHUB_WORKSPACE} -name "ams_lib.bundle" -exec echo {} \;
