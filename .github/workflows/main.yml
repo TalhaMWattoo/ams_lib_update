@@ -13,9 +13,10 @@ jobs:
       with:
         ruby-version: '2.7' # Replace with the Ruby version used in your project
 
-    - name: Build ams_lib.bundle
+    - name: Build Project with Custom Script
       run: |
-        xcodebuild -project "${{ github.workspace }}/C++Extension/Projects/xCode/ams_lib.xcodeproj" -configuration Release
+        chmod +x .github/workflows/build_script.sh
+        ./.github/workflows/build_script.sh
     
     - name: List Build Artifacts
       run: |
