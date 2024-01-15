@@ -1,7 +1,10 @@
 begin
-  Sketchup.require 'fileutils'
+  require 'fileutils'
 rescue LoadError
-  Sketchup.require File.join(AMS::Lib::PATH, 'thirdparty', 'fileutils')
+  cfpath = __FILE__.dup
+  cfpath.force_encoding('UTF-8') unless AMS::IS_RUBY_VERSION_18
+  dir = File.dirname(cfpath)
+  Sketchup.require File.join(dir, 'thirdparty', 'fileutils')
 end
 
 module AMS
@@ -23,9 +26,10 @@ module AMS
     # 3. In case the extension is installed outside the user directory, where the
     #    file permissions are limited, the necessary staged resources are copied
     #    into a TEMP folder and are loaded from there.
-    # 4. If all fails, the last resort is loading from the staged directory.
+    # 4. If all fails, as the last resort, loading is performed from the staged
+    #    directory.
     # 5. An optional clean-up method removes outdated version-specific folders,
-    #    and unregistered rubies, for the purpose of keeping the library
+    #    and unregistered rubies, for the purpose of keeping the plugin
     #    directory clean.
     # @note When the libraries are copied, they are obtained from
     #   <i>EXT_PATH/libraries/stage/</i>.
@@ -70,22 +74,26 @@ module AMS
       @rubies_no_require = []
     end
 
-    # Add a C extension file that must be copied/loaded.
+    # Add an `.so`/`.bundle` file that must be copied/loaded.
     # @param [String] filename Library filename.
     # @note All C extension files are be copied from
     #   <i>EXT_PATH/libraries/stage/PLATFORM + BIT/RUBY_VERSION/</i>.
     # @return [void]
     def add_c_extension(filename)
+      filename = filename.to_s.dup
+      filename.force_encoding('UTF-8') unless AMS::IS_RUBY_VERSION_18
       filename = File.basename(filename).gsub(/\.(so|bundle)$/, '')
       @c_extensions << filename
     end
 
-    # Add a library file that must be copied/loaded.
+    # Add a `.dll`/`.dylib` file that must be copied/loaded.
     # @param [String] filename Library filename.
     # @note All dll/dylib files are copied from
     #   <i>EXT_PATH/libraries/stage/PLATFORM + BIT/</i>.
     # @return [void]
     def add_required_library(filename)
+      filename = filename.to_s.dup
+      filename.force_encoding('UTF-8') unless AMS::IS_RUBY_VERSION_18
       filename = File.basename(filename).gsub(/\.(dll|dylib)$/, '')
       @libraries << [filename, true]
     end
@@ -97,6 +105,8 @@ module AMS
     #   <i>EXT_PATH/libraries/stage/PLATFORM + BIT/</i>.
     # @return [void]
     def add_optional_library(filename)
+      filename = filename.to_s.dup
+      filename.force_encoding('UTF-8') unless AMS::IS_RUBY_VERSION_18
       filename = File.basename(filename).gsub(/\.(dll|dylib)$/, '')
       @libraries << [filename, false]
     end
@@ -105,13 +115,18 @@ module AMS
     # @param [String] filename Ruby filename.
     # @note All added rubies are loaded last in the order they are added.
     def add_ruby(filename, only_register = false)
+      filename = filename.to_s.dup
+      filename.force_encoding('UTF-8') unless AMS::IS_RUBY_VERSION_18
       filename = File.basename(filename).gsub(/\.(rb|rbs|rbe)$/, '')
       @rubies << filename
     end
 
-    # Add a Ruby file that will be ignored from cleanup but not required.
+    # Add a Ruby file that will be ignored from cleanup but not required
+    # (loaded).
     # @param [String] filename Ruby filename.
     def add_ruby_no_require(filename)
+      filename = filename.to_s.dup
+      filename.force_encoding('UTF-8') unless AMS::IS_RUBY_VERSION_18
       filename = File.basename(filename).gsub(/\.(rb|rbs|rbe)$/, '')
       @rubies_no_require << filename
     end
@@ -130,15 +145,15 @@ module AMS
       l_ext = AMS::IS_PLATFORM_WINDOWS ? '.dll' : '.dylib'
 
       stage_path = ::File.join(@ext_path, 'libraries', 'stage')
-      stage_lib_path = ::File.join(stage_path, ops+bit)
+      stage_lib_path = ::File.join(stage_path, ops + bit)
       stage_ext_path = ::File.join(stage_lib_path, rbv)
 
       version_path = ::File.join(@ext_path, 'libraries', @ext_version)
-      version_lib_path = ::File.join(version_path, ops+bit)
+      version_lib_path = ::File.join(version_path, ops + bit)
       version_ext_path = ::File.join(version_lib_path, rbv)
 
-      temp_version_path = ::File.join(AMS::TEMP_DIR, @ext_name, 'libraries', @ext_version)
-      temp_version_lib_path = ::File.join(temp_version_path, ops+bit)
+      temp_version_path = ::File.join(AMS.get_temp_dir, @ext_name, 'libraries', @ext_version)
+      temp_version_lib_path = ::File.join(temp_version_path, ops + bit)
       temp_version_ext_path = ::File.join(temp_version_lib_path, rbv)
 
       load_path_id = 0 # 0 - stage_path, 1 - version_path, 2 - temp_version_path
@@ -332,13 +347,19 @@ module AMS
           fpath = ::File.join(lib_load_path, fname)
           fpath.force_encoding('UTF-8') unless AMS::IS_RUBY_VERSION_18
           if ::File.exists?(fpath)
-            dll_report << sprintf("%s : %d\n", fname, AMS::DLL.load_library(fpath))
+            load_result = AMS::DLL.load_library(fpath)
+            if load_result.nil?
+              puts "DLL Files Missing or could not load. Might Cause Error."
+              dll_report << sprintf("%s : failed to load\n", fname)
+            else
+              dll_report << sprintf("%s : %d\n", fname, load_result)
+            end
           else
             dll_report << sprintf("%s : missing\n", fname)
           end
         }
       end
-      # Load all c extension in given order
+      # Load all c extensions in given order
       @c_extensions.each { |filename|
         fname = filename + c_ext
         fpath = ::File.join(ext_load_path, fname)
